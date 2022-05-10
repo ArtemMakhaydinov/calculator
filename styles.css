@@ -15,7 +15,7 @@ main {
   width: 100vw;
 }
 
-.calculatorContainer {
+.calculator_container {
   display: grid;
   grid-template-columns: repeat(4, 120px);
   grid-template-rows: repeat(5, 120px);
@@ -43,14 +43,14 @@ main {
   padding: 5px;
 }
 
-.topLine {
+.top_line {
   display: flex;
   align-items: center;
   justify-content: end;
   font-size: 1.5em;
 }
 
-.bottomLine {
+.bottom_line {
   display: flex;
   align-items: center;
   justify-content: end;

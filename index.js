@@ -1,19 +1,41 @@
-function operate(number1, number2, operator){
+let number1 = [];
+let number2 = [];
+let currentOperator, topLine, bottomLine;
 
+// function operate(number1, number2, operator) {
+
+// }
+
+// function add(number1, number2) {
+
+// }
+
+// function subtract(number1, number2) {
+
+// }
+
+// function multiply(number1, number2) {
+
+// }
+
+// function divide(number1, number2) {
+
+// }
+
+function clickNumber() {
+    console.log(this.textContent);
 }
 
-function add(number1, number2){
-    
+function clickOperator() {
+    console.log(this.textContent);
 }
 
-function subtract(number1, number2){
-    
+function cancel() {
+    console.log(this.textContent);
 }
 
-function multiply(number1, number2){
-    
-}
+//Event Listeners
 
-function divide(number1, number2){
-    
-}
+document.querySelectorAll('.button_number').forEach(e => e.addEventListener('click', clickNumber));
+document.querySelectorAll('.button_operator').forEach(e => e.addEventListener('click', clickOperator));
+document.querySelector('.cancel').addEventListener('click', cancel);
