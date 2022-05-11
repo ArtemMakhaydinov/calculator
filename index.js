@@ -1,7 +1,8 @@
 let topLine = [];
-let bottomLine = [];
+let bottomLine = ['0'];
 let operator, number1, number2, lastPushedButton;
 
+document.onload = refreshBottomLine();
 
 function operate(number1, number2, operator) {
     let result;
@@ -25,11 +26,21 @@ function operate(number1, number2, operator) {
 };
 
 
-//Numbers or point clicked
+//Numbers or Point clicked
 
 function clickNumber() {
-
     buttonAnimation(this);
+
+    if(lastPushedButton == '='){
+        bottomLine = ['0'];
+    }
+
+    if (bottomLine.join('') === '0' && this.textContent != 0) {
+        bottomLine.pop();
+    } else if (bottomLine.join('') === '0' && this.textContent == 0) {
+        return;
+    }
+
     bottomLine.push(this.textContent);
     refreshBottomLine();
     lastPushedButton = this.textContent;
@@ -37,8 +48,18 @@ function clickNumber() {
 
 
 function point() {
-    console.log(this.textContent);
+    buttonAnimation(this);
 
+    if(lastPushedButton === '='){
+        bottomLine = ['0'];
+    }
+
+    if(bottomLine.includes('.')){
+        return;
+    }
+
+    bottomLine.push(this.textContent);
+    refreshBottomLine();
 }
 
 
@@ -47,7 +68,7 @@ function point() {
 function clickOperator() {
     buttonAnimation(this);
 
-    if (operator == undefined) {
+    if (operator === undefined || lastPushedButton === '=') {
         firstOperator(this.textContent);
     } else {
         secondaryOperator(this.textContent);
@@ -57,24 +78,19 @@ function clickOperator() {
 
 function firstOperator(lastOperator) {
 
-    if(lastPushedButton == undefined){
-        return;
-    }
-
     topLine = [...bottomLine];
     topLine.push(' ', lastOperator);
     lastPushedButton = lastOperator;
     operator = lastOperator;
     number1 = +bottomLine.join('')
-    console.log('n1 = ' + number1);
     refreshTopLine();
-    bottomLine = [];
+    bottomLine = ['0'];
 }
 
 
 function secondaryOperator(lastOperator) {
 
-    if (lastPushedButton == /[/\-+=*]/) {
+    if (lastPushedButton === /[/\-+=*]/) {
 
         lastPushedButton = lastOperator;
         topLine.pop().push(lastOperator);
@@ -88,7 +104,7 @@ function secondaryOperator(lastOperator) {
         topLine.push(' ', lastOperator);
         number1 = +bottomLine.join('');
         refreshBottomLine();
-        bottomLine = [];
+        bottomLine = ['0'];
     }
 
     operator = lastOperator;
@@ -98,7 +114,7 @@ function secondaryOperator(lastOperator) {
 
 function cancel() {
     topLine = [];
-    bottomLine = [];
+    bottomLine = ['0'];
     lastPushedButton = undefined;
     operator = undefined;
     number1 = undefined;
@@ -108,8 +124,38 @@ function cancel() {
 };
 
 
-function equals(lastOperator) {
-    
+function equals() {
+    buttonAnimation(this);
+
+    if (operator === undefined) {
+
+        topLine = [...bottomLine];
+        topLine.push(' ', this.textContent);
+        refreshTopLine();
+        return;
+    }
+
+    if (operator == lastPushedButton) {
+
+        number2 = number1;
+        bottomLine = [...operate(number1, number2, operator)];
+        number1 = +bottomLine.join('');
+
+    } else {
+
+        if (lastPushedButton != this.textContent) {
+            number2 = +bottomLine.join('');
+        }
+
+        bottomLine = [...operate(number1, number2, operator)];
+        topLine = [number1, ' ', operator, ' ', number2, ' ='];
+        number1 = +bottomLine.join('');
+
+    }
+
+    lastPushedButton = this.textContent;
+    refreshTopLine();
+    refreshBottomLine();
 
 }
 
@@ -126,7 +172,7 @@ function refreshBottomLine() {
 };
 
 
-function buttonAnimation(button){
+function buttonAnimation(button) {
     button.classList.add('pressed');
     setTimeout(() => {
         button.classList.remove('pressed');
