@@ -31,8 +31,8 @@ function operate(number1, number2, operator) {
 function clickNumber() {
     buttonAnimation(this);
 
-    if(lastPushedButton == '='){
-        bottomLine = ['0'];
+    if (lastPushedButton == '=') {
+        cancel();
     }
 
     if (bottomLine.join('') === '0' && this.textContent != 0) {
@@ -50,11 +50,11 @@ function clickNumber() {
 function point() {
     buttonAnimation(this);
 
-    if(lastPushedButton === '='){
+    if (lastPushedButton === '=') {
         bottomLine = ['0'];
     }
 
-    if(bottomLine.includes('.')){
+    if (bottomLine.includes('.')) {
         return;
     }
 
@@ -138,21 +138,15 @@ function equals() {
     if (operator == lastPushedButton) {
 
         number2 = number1;
-        bottomLine = [...operate(number1, number2, operator)];
-        number1 = +bottomLine.join('');
 
-    } else {
+    } else if (lastPushedButton != this.textContent) {
 
-        if (lastPushedButton != this.textContent) {
-            number2 = +bottomLine.join('');
-        }
-
-        bottomLine = [...operate(number1, number2, operator)];
-        topLine = [number1, ' ', operator, ' ', number2, ' ='];
-        number1 = +bottomLine.join('');
-
+        number2 = +bottomLine.join('');
     }
 
+    bottomLine = [...operate(number1, number2, operator)];
+    topLine = [number1, ' ', operator, ' ', number2, ' ='];
+    number1 = +bottomLine.join('');
     lastPushedButton = this.textContent;
     refreshTopLine();
     refreshBottomLine();
