@@ -56,9 +56,10 @@ main {
   justify-content: end;
   font-size: 2.5em;
   font-weight: bold;
+  width: 10ch;
 }
 
-.pushed {
+.pressed {
   opacity: 0.6;
   transform: translateY(5px);
 }
