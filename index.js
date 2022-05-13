@@ -1,5 +1,6 @@
 let topLine = [];
 let bottomLine = ['0'];
+let validBottomLine = [];
 let operator, number1, number2, lastPushedButton;
 
 document.onload = refreshBottomLine();
@@ -21,7 +22,7 @@ function operate(number1, number2, operator) {
             result = number1 / number2;
             break;
     }
-    console.log(result);
+
     return result.toString().split('');
 };
 
@@ -78,7 +79,7 @@ function clickOperator() {
 
 function firstOperator(lastOperator) {
 
-    topLine = [...bottomLine];
+    topLine = [...validBottomLine];
     topLine.push(' ', lastOperator);
     lastPushedButton = lastOperator;
     operator = lastOperator;
@@ -90,17 +91,18 @@ function firstOperator(lastOperator) {
 
 function secondaryOperator(lastOperator) {
 
-    if (lastPushedButton === /[/\-+=*]/) {
+    if (lastPushedButton === '+' || lastPushedButton === '-' || lastPushedButton === '*' || lastPushedButton === '/' || lastPushedButton === '=') {
 
         lastPushedButton = lastOperator;
-        topLine.pop().push(lastOperator);
+        topLine.pop();
+        topLine.push(lastOperator);
 
     } else {
 
         lastPushedButton = lastOperator;
         number2 = +bottomLine.join('');
         bottomLine = [...operate(number1, number2, operator)];
-        topLine = [...bottomLine];
+        topLine = [...validBottomLine];
         topLine.push(' ', lastOperator);
         number1 = +bottomLine.join('');
         refreshBottomLine();
@@ -129,7 +131,7 @@ function equals() {
 
     if (operator === undefined) {
 
-        topLine = [...bottomLine];
+        topLine = [...validBottomLine];
         topLine.push(' ', this.textContent);
         refreshTopLine();
         return;
@@ -144,8 +146,8 @@ function equals() {
         number2 = +bottomLine.join('');
     }
 
+    topLine = [topLine.slice(0,-1).join(''), ' ', operator, ' ', validBottomLine.join(''), ' ='];
     bottomLine = [...operate(number1, number2, operator)];
-    topLine = [number1, ' ', operator, ' ', number2, ' ='];
     number1 = +bottomLine.join('');
     lastPushedButton = this.textContent;
     refreshTopLine();
@@ -157,14 +159,50 @@ function equals() {
 //Display and animation
 
 function refreshTopLine() {
+
+    if (topLine.slice(-3, -2) == '.') {
+        topLine = [...topLine.slice(0, -3), ...topLine.slice(-2)];
+    }
+
     document.querySelector('.top_line').textContent = topLine.join('');
 };
 
 
 function refreshBottomLine() {
-    document.querySelector('.bottom_line').textContent = bottomLine.join('');
+    let validOutput = validateLongNumbers(bottomLine);
+
+    document.querySelector('.bottom_line').textContent = validOutput.join('');
 };
 
+
+function validateLongNumbers(longNumber) {
+
+    if (longNumber.length <= 10) {
+        validBottomLine = [...longNumber];
+        return longNumber;
+    }
+
+    let float = +longNumber.join('');
+    let e = 0;
+
+    if (float < 0) {
+        while (float < 0) {
+            float *= 10;
+            e--;
+        }
+    } else if (float > 0) {
+        while (float >= 10) {
+            float /= 10;
+            e++;
+        }
+    } 
+
+    float = float.toFixed(8 - e.toString().length);
+    validBottomLine = [float, 'e', e]
+
+    return validBottomLine;
+
+}
 
 function buttonAnimation(button) {
     button.classList.add('pressed');
