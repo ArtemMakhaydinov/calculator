@@ -51,10 +51,12 @@ function point() {
     buttonAnimation(this);
 
     if (lastPushedButton === '=') {
+
         bottomLine = ['0'];
     }
 
     if (bottomLine.includes('.')) {
+
         return;
     }
 
@@ -63,14 +65,85 @@ function point() {
 }
 
 
+function numberValidator(arr) {
+    if (typeof (arr) === 'number') { //Check arr is array
+        arr = arr.toString().split('');
+    } else {
+        arr = +arr.join('');
+        arr = arr.toString().split('');
+    }
+
+    if (arr.includes('.') && arr.length <= 11 && !arr.includes('e')) { //Return short numbers without e
+        return arr;
+    } else if (arr.length <= 10) {
+        return arr;
+    }
+
+    let e = 0;
+    console.log('e ' + e);
+    let num = +arr.join('');
+    console.log('arr ' + arr);
+
+    if (arr.includes('e')) {
+        if (+arr.slice(indexOf('e') + 1).join === 0) { //Check e+-0, recursion
+            arr = arr.slice(indexOf('e'));
+            numberValidator(arr);
+        }
+
+        e = +arr.slice(indexOf('e') + 1).join('');
+        num = +arr.slice(0, indexOf('e').join(''));
+
+    } else {
+        if (+arr.join('') < 999999999.9 && +arr.join('') > 0.000000001) { //Check valid numbers with point without e
+            return arr.slice(0, 11);
+        }
+    }
+
+    if (num >= 10) { //Set 1 < num < 10
+        while (num >= 10) {
+            num /= 10;
+            e++;
+        }
+    } else if (num < 1) {
+        while (num < 1) {
+            num *= 10;
+            e--;
+        }
+    }
+
+    if (num.toString().length + e - 1 <= 10) { //Check if number valid without e
+        return num * (10 ** e);
+    }
+
+    num = num.toFixed(7 - e.toString.length).toString().split('')
+
+    if (e > 0) {
+        return [...num, 'e', '+', ...e.toString().split('')];
+    } else if (e < 0) {
+        return [...num, 'e', '-', ...e.toString().split('')];
+    } else {
+        return num.toFixed(9);
+    }
+}
+
 //Operators or Cancel clicked
 
 function clickOperator() {
+
     buttonAnimation(this);
 
+    if (bottomLine.slice(-1) == '.') {
+
+        bottomLine.pop();
+        refreshBottomLine();
+    }
+
     if (operator === undefined || lastPushedButton === '=') {
+
         firstOperator(this.textContent);
+
     } else {
+
         secondaryOperator(this.textContent);
     }
 };
@@ -90,10 +163,11 @@ function firstOperator(lastOperator) {
 
 function secondaryOperator(lastOperator) {
 
-    if (lastPushedButton === /[/\-+=*]/) {
+    if (lastPushedButton == '+' || lastPushedButton == '-' || lastPushedButton == '*' || lastPushedButton == '/' || lastPushedButton == '=') {
 
         lastPushedButton = lastOperator;
-        topLine.pop().push(lastOperator);
+        topLine.pop();
+        topLine.push(lastOperator);
 
     } else {
 
@@ -127,6 +201,12 @@ function cancel() {
 function equals() {
     buttonAnimation(this);
 
+    if (bottomLine.slice(-1) == '.') {
+
+        bottomLine.pop();
+        refreshBottomLine();
+    }
+
     if (operator === undefined) {
 
         topLine = [...bottomLine];
@@ -135,7 +215,7 @@ function equals() {
         return;
     }
 
-    if (operator == lastPushedButton) {
+    if (lastPushedButton == operator) {
 
         number2 = number1;
 
@@ -162,6 +242,7 @@ function refreshTopLine() {
 
 
 function refreshBottomLine() {
+    bottomLine = [...numberValidator(bottomLine)];
     document.querySelector('.bottom_line').textContent = bottomLine.join('');
 };
 
