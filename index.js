@@ -91,11 +91,7 @@ function clickOperator() {
 
 function firstOperator(lastOperator) {
 
-<<<<<<< HEAD
-    topLine = [...validBottomLine];
-=======
     topLine = [...numberValidator(bottomLine)];
->>>>>>> my-temporary-work
     topLine.push(' ', lastOperator);
     lastPushedButton = lastOperator;
     operator = lastOperator;
@@ -107,11 +103,7 @@ function firstOperator(lastOperator) {
 
 function secondaryOperator(lastOperator) {
 
-<<<<<<< HEAD
     if (lastPushedButton === '+' || lastPushedButton === '-' || lastPushedButton === '*' || lastPushedButton === '/' || lastPushedButton === '=') {
-=======
-    if (lastPushedButton == '+' || lastPushedButton == '-' || lastPushedButton == '*' || lastPushedButton == '/' || lastPushedButton == '=') {
->>>>>>> my-temporary-work
 
         lastPushedButton = lastOperator;
         topLine.pop();
@@ -122,11 +114,7 @@ function secondaryOperator(lastOperator) {
         lastPushedButton = lastOperator;
         number2 = +bottomLine.join('');
         bottomLine = [...operate(number1, number2, operator)];
-<<<<<<< HEAD
-        topLine = [...validBottomLine];
-=======
         topLine = [...numberValidator(bottomLine)];
->>>>>>> my-temporary-work
         topLine.push(' ', lastOperator);
         number1 = +bottomLine.join('');
         refreshBottomLine();
@@ -161,11 +149,7 @@ function equals() {
 
     if (operator === undefined) {
 
-<<<<<<< HEAD
-        topLine = [...validBottomLine];
-=======
         topLine = [...numberValidator(bottomLine)];
->>>>>>> my-temporary-work
         topLine.push(' ', this.textContent);
         refreshTopLine();
         return;
@@ -182,10 +166,7 @@ function equals() {
 
     topLine = [topLine.slice(0,-1).join(''), ' ', operator, ' ', validBottomLine.join(''), ' ='];
     bottomLine = [...operate(number1, number2, operator)];
-<<<<<<< HEAD
-=======
     topLine = [...numberValidator(number1), ' ', operator, ' ', ...numberValidator(number2), ' ='];
->>>>>>> my-temporary-work
     number1 = +bottomLine.join('');
     lastPushedButton = this.textContent;
     refreshTopLine();
@@ -270,13 +251,7 @@ function refreshTopLine() {
 
 
 function refreshBottomLine() {
-<<<<<<< HEAD
-    let validOutput = validateLongNumbers(bottomLine);
-
-    document.querySelector('.bottom_line').textContent = validOutput.join('');
-=======
     document.querySelector('.bottom_line').textContent = [...numberValidator(bottomLine)].join('');
->>>>>>> my-temporary-work
 };
 
 
