@@ -33,21 +33,22 @@ main {
 }
 
 .display {
-    display: flex;
+  display: flex;
   grid-column: 1/4;
-  margin: 10px;
   background-color: #e5cb9f;
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  padding: 5px;
+  margin: 10px;
+  padding: 0;
 }
 
 .top_line {
   display: flex;
   align-items: center;
   justify-content: end;
-  font-size: 1.5em;
+  font-size: 1.1em;
+  font-weight: 700;
 }
 
 .bottom_line {

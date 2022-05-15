@@ -21,7 +21,7 @@ function operate(number1, number2, operator) {
             result = number1 / number2;
             break;
     }
-    console.log(result);
+
     return result.toString().split('');
 };
 
@@ -66,10 +66,8 @@ function point() {
 
 
 function numberValidator(arr) {
+
     if (typeof (arr) === 'number') { //Check arr is array
-        arr = arr.toString().split('');
-    } else {
-        arr = +arr.join('');
         arr = arr.toString().split('');
     }
 
@@ -80,18 +78,19 @@ function numberValidator(arr) {
     }
 
     let e = 0;
-    console.log('e ' + e);
     let num = +arr.join('');
-    console.log('arr ' + arr);
 
     if (arr.includes('e')) {
-        if (+arr.slice(indexOf('e') + 1).join === 0) { //Check e+-0, recursion
-            arr = arr.slice(indexOf('e'));
+
+        let eIndex = arr.indexOf('e');
+
+        if (+arr.slice(eIndex + 1).join === 0) { //Check e+-0, recursion
+            arr = arr.slice(eIndex);
             numberValidator(arr);
         }
 
-        e = +arr.slice(indexOf('e') + 1).join('');
-        num = +arr.slice(0, indexOf('e').join(''));
+        e = +arr.slice(eIndex + 1).join('');
+        num = +arr.slice(0, eIndex).join('');
 
     } else {
         if (+arr.join('') < 999999999.9 && +arr.join('') > 0.000000001) { //Check valid numbers with point without e
@@ -99,7 +98,9 @@ function numberValidator(arr) {
         }
     }
 
-    if (num >= 10) { //Set 1 < num < 10
+    if (num === 0) {
+        return ['0', '.', 'e', '-', arr.length - 2]
+    } else if (num >= 10) { //Set 1 < num < 10
         while (num >= 10) {
             num /= 10;
             e++;
@@ -111,16 +112,17 @@ function numberValidator(arr) {
         }
     }
 
-    if (num.toString().length + e - 1 <= 10) { //Check if number valid without e
-        return num * (10 ** e);
+    if ((num * (10 ** e)).toString().length <= 10) { //Check if number valid without e
+        return (num * (10 ** e)).toString().split('');
     }
 
-    num = num.toFixed(7 - e.toString.length).toString().split('')
+    num = num.toFixed(6 - e.toString.length);
+    num = (num * 1).toString().split('')
 
     if (e > 0) {
         return [...num, 'e', '+', ...e.toString().split('')];
     } else if (e < 0) {
-        return [...num, 'e', '-', ...e.toString().split('')];
+        return [...num, 'e', ...e.toString().split('')];
     } else {
         return num.toFixed(9);
     }
@@ -151,7 +153,7 @@ function clickOperator() {
 
 function firstOperator(lastOperator) {
 
-    topLine = [...bottomLine];
+    topLine = [...numberValidator(bottomLine)];
     topLine.push(' ', lastOperator);
     lastPushedButton = lastOperator;
     operator = lastOperator;
@@ -174,7 +176,7 @@ function secondaryOperator(lastOperator) {
         lastPushedButton = lastOperator;
         number2 = +bottomLine.join('');
         bottomLine = [...operate(number1, number2, operator)];
-        topLine = [...bottomLine];
+        topLine = [...numberValidator(bottomLine)];
         topLine.push(' ', lastOperator);
         number1 = +bottomLine.join('');
         refreshBottomLine();
@@ -209,7 +211,7 @@ function equals() {
 
     if (operator === undefined) {
 
-        topLine = [...bottomLine];
+        topLine = [...numberValidator(bottomLine)];
         topLine.push(' ', this.textContent);
         refreshTopLine();
         return;
@@ -225,7 +227,7 @@ function equals() {
     }
 
     bottomLine = [...operate(number1, number2, operator)];
-    topLine = [number1, ' ', operator, ' ', number2, ' ='];
+    topLine = [...numberValidator(number1), ' ', operator, ' ', ...numberValidator(number2), ' ='];
     number1 = +bottomLine.join('');
     lastPushedButton = this.textContent;
     refreshTopLine();
@@ -242,8 +244,7 @@ function refreshTopLine() {
 
 
 function refreshBottomLine() {
-    bottomLine = [...numberValidator(bottomLine)];
-    document.querySelector('.bottom_line').textContent = bottomLine.join('');
+    document.querySelector('.bottom_line').textContent = [...numberValidator(bottomLine)].join('');
 };
 
 
