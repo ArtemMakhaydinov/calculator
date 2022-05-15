@@ -65,69 +65,6 @@ function point() {
 }
 
 
-function numberValidator(arr) {
-
-    if (typeof (arr) === 'number') { //Check arr is array
-        arr = arr.toString().split('');
-    }
-
-    if (arr.includes('.') && arr.length <= 11 && !arr.includes('e')) { //Return short numbers without e
-        return arr;
-    } else if (arr.length <= 10) {
-        return arr;
-    }
-
-    let e = 0;
-    let num = +arr.join('');
-
-    if (arr.includes('e')) {
-
-        let eIndex = arr.indexOf('e');
-
-        if (+arr.slice(eIndex + 1).join === 0) { //Check e+-0, recursion
-            arr = arr.slice(eIndex);
-            numberValidator(arr);
-        }
-
-        e = +arr.slice(eIndex + 1).join('');
-        num = +arr.slice(0, eIndex).join('');
-
-    } else {
-        if (+arr.join('') < 999999999.9 && +arr.join('') > 0.000000001) { //Check valid numbers with point without e
-            return arr.slice(0, 11);
-        }
-    }
-
-    if (num === 0) {
-        return ['0', '.', 'e', '-', arr.length - 2]
-    } else if (num >= 10) { //Set 1 < num < 10
-        while (num >= 10) {
-            num /= 10;
-            e++;
-        }
-    } else if (num < 1) {
-        while (num < 1) {
-            num *= 10;
-            e--;
-        }
-    }
-
-    if ((num * (10 ** e)).toString().length <= 10) { //Check if number valid without e
-        return (num * (10 ** e)).toString().split('');
-    }
-
-    num = num.toFixed(6 - e.toString.length);
-    num = (num * 1).toString().split('')
-
-    if (e > 0) {
-        return [...num, 'e', '+', ...e.toString().split('')];
-    } else if (e < 0) {
-        return [...num, 'e', ...e.toString().split('')];
-    } else {
-        return num.toFixed(9);
-    }
-}
-
 //Operators or Cancel clicked
 
 function clickOperator() {
@@ -237,6 +174,69 @@ function equals() {
 
 
 //Display and animation
+
+function numberValidator(arr) {
+
+    if (typeof (arr) === 'number') { //Check arr is array
+        arr = arr.toString().split('');
+    }
+
+    if (arr.includes('.') && arr.length <= 11 && !arr.includes('e')) { //Return short numbers without e
+        return arr;
+    } else if (arr.length <= 10) {
+        return arr;
+    }
+
+    let e = 0;
+    let num = +arr.join('');
+
+    if (arr.includes('e')) {
+
+        let eIndex = arr.indexOf('e');
+
+        if (+arr.slice(eIndex + 1).join === 0) { //Check e+-0, recursion
+            arr = arr.slice(eIndex);
+            numberValidator(arr);
+        }
+
+        e = +arr.slice(eIndex + 1).join('');
+        num = +arr.slice(0, eIndex).join('');
+
+    } else {
+        if (+arr.join('') < 999999999.9 && +arr.join('') > 0.000000001) { //Check valid numbers with point without e
+            return arr.slice(0, 11);
+        }
+    }
+
+    if (num === 0) {
+        return ['0', '.', 'e', '-', arr.length - 2]
+    } else if (num >= 10) { //Set 1 < num < 10
+        while (num >= 10) {
+            num /= 10;
+            e++;
+        }
+    } else if (num < 1) {
+        while (num < 1) {
+            num *= 10;
+            e--;
+        }
+    }
+
+    if ((num * (10 ** e)).toString().length <= 10) { //Check if number valid without e
+        return (num * (10 ** e)).toString().split('');
+    }
+
+    num = num.toFixed(6 - e.toString.length);
+    num = (num * 1).toString().split('')
+
+    if (e > 0) {
+        return [...num, 'e', '+', ...e.toString().split('')];
+    } else if (e < 0) {
+        return [...num, 'e', ...e.toString().split('')];
+    } else {
+        return num.toFixed(9);
+    }
+}
 
 function refreshTopLine() {
     document.querySelector('.top_line').textContent = topLine.join('');
