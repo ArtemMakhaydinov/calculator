@@ -33,14 +33,14 @@ main {
 }
 
 .display {
-    display: flex;
+  display: flex;
   grid-column: 1/4;
-  margin: 10px;
   background-color: #e5cb9f;
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  padding: 5px;
+  margin: 10px;
+  padding: 0;
 }
 
 .top_line {
@@ -48,6 +48,10 @@ main {
   align-items: center;
   justify-content: end;
   font-size: 1.1em;
+<<<<<<< HEAD
+=======
+  font-weight: 700;
+>>>>>>> my-temporary-work
 }
 
 .bottom_line {
