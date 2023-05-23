@@ -224,7 +224,7 @@ function numberValidator(arr) {
         }
     }
 
-    if ((num * (10 ** e)).toString().length <= 10) { //Check if number valid without e
+    if ((num * (10 ** e)).toString().length <= 11) { //Check if number valid without e
         return (num * (10 ** e)).toString().split('');
     }
 
